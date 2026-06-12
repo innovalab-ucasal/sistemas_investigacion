@@ -1,0 +1,52 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+enum NaturalezaTrazabilidad {
+  CREACION
+  MODIFICACION
+  ELIMINACION
+}
+
+model Trazabilidad {
+  id String @id @default(cuid())
+
+  naturaleza NaturalezaTrazabilidad
+  operacion  String
+  modulo     String
+
+  entidad   String?
+  entidadId String?
+
+  descripcion String?
+
+  datos           Json?
+  datosAnteriores Json?
+
+  usuarioId     String?
+  usuarioNombre String?
+  usuarioEmail  String?
+
+  ip        String?
+  userAgent String?
+
+  createdAt DateTime @default(now())
+
+  @@index([naturaleza])
+  @@index([modulo])
+  @@index([operacion])
+  @@index([entidad, entidadId])
+  @@index([usuarioId])
+  @@index([createdAt])
+
+  @@map("trazabilidad")
+}
